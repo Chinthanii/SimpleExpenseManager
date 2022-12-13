@@ -60,7 +60,7 @@ public class PersistentTransactionDAO extends DataBaseHelper implements Transact
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor  = db.rawQuery(query,null);
-        this.transactions = new ArrayList<Transaction>();
+        this.transactions = new ArrayList<>();
 
         while (cursor.moveToNext()){
             String TR_date = cursor.getString(1);

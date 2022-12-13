@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +39,9 @@ public class PersistentAccountDAO extends DataBaseHelper implements AccountDAO {
         String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
 
-        this.accountNos = new ArrayList<String>();
+        this.accountNos = new ArrayList<>();
 
         Cursor cursor = db.rawQuery(query,null);
-
 
         while (cursor.moveToNext()){
             String AC_no = cursor.getString(0);
@@ -65,7 +63,7 @@ public class PersistentAccountDAO extends DataBaseHelper implements AccountDAO {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor  = db.rawQuery(query,null);
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList<>();
 
         while (cursor.moveToNext()){
             String AC_no = cursor.getString(0);
@@ -114,10 +112,8 @@ public class PersistentAccountDAO extends DataBaseHelper implements AccountDAO {
         cv.put(COLUMN_ACCOUNT_HOLDER_NAME,account.getAccountHolderName());
         cv.put(COLUMN_BALANCE,account.getBalance());
 
-        long result = db.insert(TABLE_NAME,null,cv);
-        if(result == -1) {
-            Toast.makeText(context, "Cannot add the account!!", Toast.LENGTH_SHORT).show();
-        }
+        db.insert(TABLE_NAME,null,cv);
+
     }
 
     @Override
@@ -137,12 +133,13 @@ public class PersistentAccountDAO extends DataBaseHelper implements AccountDAO {
 
     @Override
     public void updateBalance(String accountNo, ExpenseType expenseType, double amount) throws InvalidAccountException {
-        SQLiteDatabase db = this.getWritableDatabase();
 
+        SQLiteDatabase db = this.getWritableDatabase();
 
         String Query = "select " + COLUMN_BALANCE + " from " + TABLE_NAME+ " where "
                 + COLUMN_ACCOUNT_NO + " = '"+ accountNo +"' ;";
         Cursor cursor = db.rawQuery(Query,null);
+
         cursor.moveToFirst();
         double AC_balance = cursor.getDouble(0);
 
@@ -164,6 +161,8 @@ public class PersistentAccountDAO extends DataBaseHelper implements AccountDAO {
             throw new InvalidAccountException(msg);
         }
 
+        cursor.close();
+        db.close();
 
     }
 }

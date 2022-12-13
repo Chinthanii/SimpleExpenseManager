@@ -21,7 +21,7 @@ public class PersistentDemoExpenseManager extends ExpenseManager {
     @Override
     public void setup() throws ExpenseManagerException {
 
-        /*** Begin generating dummy data for In-Memory implementation ***/
+        /*** Begin generating and saving dummy data to the database ***/
 
         TransactionDAO persistentTransactionDAO = new PersistentTransactionDAO(this.context);
         setTransactionsDAO(persistentTransactionDAO);
